@@ -20,3 +20,21 @@ export function useGetAllProducts(limit = 20) {
     }, [limit])
     return [products, loading]
 }
+export function useGetProductsById(productId) {
+    const [loading, setLoading] = useState(false);
+    const [product, setProduct] = useState({});
+    useEffect(() => {
+        async function getSingleProductDetails(productId) {
+            setLoading(true);
+            const product = await AIRTRIBE_API.get(`/products/${productId}`);
+            setLoading(false);
+            setProduct(product.data);
+        }
+        try {
+            getSingleProductDetails(productId);
+        } catch (error) {
+            setLoading(false);
+        }
+    }, [productId])
+    return [product, loading]
+}
